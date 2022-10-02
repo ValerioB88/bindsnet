@@ -188,7 +188,7 @@ class EnvironmentPipeline(BasePipeline):
                 self.action_counter = 0
 
         # Run a step of the environment.
-        obs, reward, done, info = self.env.step(self.action)
+        obs, reward, done, truncation, info = self.env.step(self.action)
 
         # Set reward in case of delay.
         if self.reward_delay is not None:
@@ -303,7 +303,7 @@ class EnvironmentPipeline(BasePipeline):
         if self.plot_interval is None:
             return
 
-        obs, reward, done, info = gym_batch
+        obs, reward, done, truncation, info = gym_batch
 
         for key, item in self.plot_config.items():
             if key == "obs_step" and item is not None:

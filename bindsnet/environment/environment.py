@@ -122,7 +122,7 @@ class GymEnvironment(Environment):
         :return: Observation, reward, done flag, and information dictionary.
         """
         # Call gym's environment step function.
-        self.obs, self.reward, self.done, info = self.env.step(a)
+        self.obs, self.reward, self.done, _, info = self.env.step(a)
 
         if self.clip_rewards:
             self.reward = np.sign(self.reward)
@@ -170,7 +170,7 @@ class GymEnvironment(Environment):
         :return: Observation from the environment.
         """
         # Call gym's environment reset function.
-        self.obs = self.env.reset()
+        self.obs, _ = self.env.reset()
         self.preprocess()
 
         self.history = {i: torch.Tensor() for i in self.history}

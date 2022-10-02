@@ -177,11 +177,12 @@ class Connection(AbstractConnection):
             if (self.wmin != -np.inf).any() or (self.wmax != np.inf).any():
                 w = torch.clamp(torch.as_tensor(w), self.wmin, self.wmax)
 
-        self.w = Parameter(w, requires_grad=False)
+        self.w = Parameter(w, requires_grad=False) # .cuda()
 
-        b = kwargs.get("b", None)
-        if b is not None:
-            self.b = Parameter(b, requires_grad=False)
+        use_bias = kwargs.get("use_bias", None)
+        if use_bias:
+            self.b = self.wmin + torch.rand(target.n) * (self.wmax - self.wmin)
+            self.b = Parameter(self.b, requires_grad=False) # .cuda()
         else:
             self.b = None
 

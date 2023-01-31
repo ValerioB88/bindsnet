@@ -165,7 +165,9 @@ class Connection(AbstractConnection):
             tensor of same size as w
         :param float norm: Total weight per target neuron normalization constant.
         """
+
         super().__init__(source, target, nu, reduction, weight_decay, **kwargs)
+
 
         w = kwargs.get("w", None)
         if w is None:
@@ -181,8 +183,11 @@ class Connection(AbstractConnection):
 
         use_bias = kwargs.get("use_bias", None)
         if use_bias:
-            self.b = self.wmin + torch.rand(target.n) * (self.wmax - self.wmin)
-            self.b = Parameter(self.b, requires_grad=False) # .cuda()
+            if (self.wmin == -np.inf).any() or (self.wmax == np.inf).any():
+                b = torch.clamp(torch.rand(target.n), self.wmin, self.wmax)
+            else:
+                b = self.wmin + torch.rand(target.n) * (self.wmax - self.wmin)
+            self.b = Parameter(b, requires_grad=False) # .cuda()
         else:
             self.b = None
 

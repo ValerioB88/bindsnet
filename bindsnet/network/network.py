@@ -318,9 +318,9 @@ class Network(torch.nn.Module):
         masks = kwargs.get("masks", {})
         injects_v = kwargs.get("injects_v", {})
 
-        # Compute reward.
-        if self.reward_fn is not None:
-            kwargs["reward"] = self.reward_fn.compute(**kwargs)
+        # # Compute reward.
+        # if self.reward_fn is not None:
+        #     kwargs["reward"] = self.reward_fn.compute(**kwargs)
 
         # Dynamic setting of batch size.
         if inputs != {}:
@@ -354,6 +354,10 @@ class Network(torch.nn.Module):
 
         # Simulate network activity for `time` timesteps.
         for t in range(timesteps):
+            # Compute reward.
+            if self.reward_fn is not None:
+                kwargs["reward"] = self.reward_fn.compute(**kwargs)
+
             # Get input to all layers (synchronous mode).
             current_inputs = {}
             if not one_step:

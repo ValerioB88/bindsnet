@@ -2213,16 +2213,16 @@ class MSTDPET(LearningRule):
             self.nu[0] * self.connection.dt * reward * self.eligibility_trace
         )
 
+        self.eligibility = torch.outer(self.p_plus, target_s) + torch.outer(
+            source_s, self.p_minus
+        )
+
         # Update P^+ and P^- values.
         self.p_plus *= torch.exp(-self.connection.dt / self.tc_plus)
         self.p_plus += a_plus * source_s
         self.p_minus *= torch.exp(-self.connection.dt / self.tc_minus)
         self.p_minus += a_minus * target_s
 
-        # Calculate point eligibility value.
-        self.eligibility = torch.outer(self.p_plus, target_s) + torch.outer(
-            source_s, self.p_minus
-        )
 
         super().update()
 

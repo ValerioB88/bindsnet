@@ -188,7 +188,7 @@ class EnvironmentPipeline(BasePipeline):
                 self.action_counter = 0
 
         # Run a step of the environment.
-        obs, reward, done, truncation, info = self.env.step(self.action)
+        obs, reward, done, info = self.env.step(self.action)
 
         # Set reward in case of delay.
         if self.reward_delay is not None:
